@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="titleViewModel"
+            type="com.example.breakablecam.screens.title.TitleViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,7 +18,6 @@
             android:id="@+id/wallpaperView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/takingView"
             app:layout_constraintTop_toTopOf="parent"
@@ -22,7 +27,7 @@
             android:id="@+id/choosingView"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toTopOf="@+id/choosingText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -32,7 +37,8 @@
             android:id="@+id/takingView"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
+            android:onClick="@{() -> titleViewModel.takingChecked()}"
             app:layout_constraintBottom_toTopOf="@+id/takingText"
             app:layout_constraintEnd_toStartOf="@+id/choosingView"
             app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +48,7 @@
             android:id="@+id/takingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif"
             android:text="@string/taking_button_text"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +60,7 @@
             android:id="@+id/choosingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif"
             android:text="@string/choosing_button_text"
             app:layout_constraintBottom_toBottomOf="parent"

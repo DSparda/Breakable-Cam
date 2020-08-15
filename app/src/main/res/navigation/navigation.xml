@@ -8,6 +8,15 @@
     <fragment
         android:id="@+id/titleFragment"
         android:name="com.example.breakablecam.screens.title.TitleFragment"
-        android:label="title_fragment"
-        tools:layout="@layout/title_fragment" />
+        android:label="Màn hình chính"
+        tools:layout="@layout/title_fragment" >
+        <action
+            android:id="@+id/action_title_to_taking"
+            app:destination="@id/takePictureFragment"
+            app:popUpTo="@id/titleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/takePictureFragment"
+        android:name="com.example.breakablecam.screens.takingPicture.TakePictureFragment"
+        android:label="TakePictureFragment" />
 </navigation>
