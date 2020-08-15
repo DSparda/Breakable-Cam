@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".screens.title.TitleFragment">
+
+        <ImageView
+            android:id="@+id/wallpaperView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/takingView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="21   0dp" />
+
+        <ImageView
+            android:id="@+id/choosingView"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/choosingText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/takingView" />
+
+        <ImageView
+            android:id="@+id/takingView"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/takingText"
+            app:layout_constraintEnd_toStartOf="@+id/choosingView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/takingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/taking_button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/takingView"
+            app:layout_constraintStart_toStartOf="@+id/takingView"
+            tools:text="@string/taking_button_text" />
+
+        <TextView
+            android:id="@+id/choosingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/choosing_button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/choosingView"
+            app:layout_constraintStart_toStartOf="@+id/choosingView"
+            tools:text="@string/choosing_button_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

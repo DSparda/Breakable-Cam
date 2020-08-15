@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BreakableCam</string>
+    <string name="taking_button_text">Chụp ảnh</string>
+    <string name="choosing_button_text">Chọn ảnh</string>
+</resources>
