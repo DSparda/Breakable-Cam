@@ -10,9 +10,11 @@ class TitleViewModel : ViewModel() {
     fun setChoosingViewSource(imageView: ImageView) {
         imageView.setImageResource(R.drawable.gallery)
     }
+
     fun setTakingViewSource(imageView: ImageView) {
         imageView.setImageResource(R.drawable.camera)
     }
+
     fun setWallpaperViewSource(imageView: ImageView) {
         imageView.setImageResource(R.drawable.camera_girl)
     }

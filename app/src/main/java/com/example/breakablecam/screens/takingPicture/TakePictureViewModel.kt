@@ -8,9 +8,11 @@ class TakePictureViewModel : ViewModel() {
     fun setStickerViewSource(imageView: ImageView?) {
         imageView?.setImageResource(R.drawable.sticker)
     }
+
     fun setTakePhotoViewSource(imageView: ImageView?) {
         imageView?.setImageResource(R.drawable.takephoto)
     }
+
     fun setMakeupViewSource(imageView: ImageView?) {
         imageView?.setImageResource(R.drawable.makeup)
     }
