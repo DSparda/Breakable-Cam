@@ -11,12 +11,11 @@
         android:label="Màn hình chính"
         tools:layout="@layout/title_fragment" >
         <action
-            android:id="@+id/action_title_to_taking"
-            app:destination="@id/takePictureFragment"
-            app:popUpTo="@id/titleFragment" />
+            android:id="@+id/action_titleFragment_to_takePictureActivity"
+            app:destination="@id/takePictureActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/takePictureFragment"
-        android:name="com.example.breakablecam.screens.takingPicture.TakePictureFragment"
-        android:label="TakePictureFragment" />
+    <activity
+        android:id="@+id/takePictureActivity"
+        android:name="com.example.breakablecam.screens.takingPicture.TakePictureActivity"
+        android:label="TakePictureActivity" />
 </navigation>

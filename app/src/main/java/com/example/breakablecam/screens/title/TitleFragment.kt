@@ -37,7 +37,7 @@ class TitleFragment : Fragment() {
             when(check) {
                 1 -> {
                     this.findNavController()
-                        .navigate(TitleFragmentDirections.actionTitleToTaking())
+                        .navigate(TitleFragmentDirections.actionTitleFragmentToTakePictureActivity())
                     viewModel.doneNav()
                 }
             }

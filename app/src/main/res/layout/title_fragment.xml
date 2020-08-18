@@ -17,11 +17,12 @@
         <ImageView
             android:id="@+id/wallpaperView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/takingView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="21   0dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/choosingView"

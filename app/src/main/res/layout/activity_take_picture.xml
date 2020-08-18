@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="takePictureViewModel"
             type="com.example.breakablecam.screens.takingPicture.TakePictureViewModel" />
@@ -11,27 +12,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".screens.takingPicture.TakePictureFragment">
+        android:layout_height="match_parent">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/face_fragment"
-            android:name="com.example.breakablecam.screens.takingPicture.FaceArFragment"
+            android:id="@+id/face_fragment_cointanier"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
+            android:paddingBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/takePhotoView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            tools:visibility="visible">
+
+            <fragment
+                android:id="@+id/face_fragment"
+                android:name="com.example.breakablecam.screens.takingPicture.FaceArFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.fragment.app.FragmentContainerView>
+
 
         <ImageView
             android:id="@+id/stickerView"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
             android:layout_marginBottom="16dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/takePhotoView"
             app:layout_constraintHorizontal_bias="0.5"
@@ -42,6 +49,7 @@
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
             android:layout_marginBottom="16dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/makeupView"
             app:layout_constraintHorizontal_bias="0.5"
@@ -52,10 +60,33 @@
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
             android:layout_marginBottom="16dp"
+            android:onClick="@{() -> takePictureViewModel.tapMakeupView()}"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/takePhotoView" />
 
+        <ImageView
+            android:id="@+id/makeupView1a"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible"
+            android:onClick="@{() -> takePictureViewModel.tapMakeup1aView()}"/>
+
+        <ImageView
+            android:id="@+id/makeupView1"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginStart="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/makeupView1a"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
