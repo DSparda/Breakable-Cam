@@ -1,15 +1,25 @@
 package com.example.breakablecam.screens.takingPicture
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.HandlerThread
+import android.view.PixelCopy
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.breakablecam.R
 import com.example.breakablecam.databinding.ActivityTakePictureBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.ar.core.AugmentedFace
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.*
@@ -17,15 +27,19 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.rendering.Texture
 import com.google.ar.sceneform.ux.AugmentedFaceNode
-import kotlinx.android.synthetic.main.activity_take_picture.*
-import kotlinx.coroutines.delay
-import java.util.HashMap
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TakePictureActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TakePictureViewModel
     private lateinit var arFragment: FaceArFragment
-    var modelRenderable: ModelRenderable? = null
+    private var modelRenderable: ModelRenderable? = null
     private var meshTexture: Texture? = null
     private val faceNodeMap = HashMap<AugmentedFace, AugmentedFaceNode?>()
 
@@ -55,12 +69,12 @@ class TakePictureActivity : AppCompatActivity() {
         viewModel.makeupTap.observe(this, Observer { check ->
             if (check == 1) {
                 binding.apply {
-                    makeupView.visibility = View.GONE
-                    takePhotoView.visibility = View.GONE
-                    stickerView.visibility = View.GONE
-                    makeupView1.visibility = View.VISIBLE
-                    makeupView1a.visibility = View.VISIBLE
-                    backArrow.visibility = View.VISIBLE
+                    makeupView.visibility = GONE
+                    takePhotoView.visibility = GONE
+                    stickerView.visibility = GONE
+                    makeupView1.visibility = VISIBLE
+                    makeupView1a.visibility = VISIBLE
+                    backArrow.visibility = VISIBLE
                     val params =
                         faceFragmentCointanier.layoutParams as ConstraintLayout.LayoutParams
                     params.bottomToTop = R.id.makeupView1
@@ -72,11 +86,11 @@ class TakePictureActivity : AppCompatActivity() {
         viewModel.stickerTap.observe(this, Observer { check ->
             if (check == 1) {
                 binding.apply {
-                    makeupView.visibility = View.GONE
-                    takePhotoView.visibility = View.GONE
-                    stickerView.visibility = View.GONE
-                    stickerView1.visibility = View.VISIBLE
-                    backArrow.visibility = View.VISIBLE
+                    makeupView.visibility = GONE
+                    takePhotoView.visibility = GONE
+                    stickerView.visibility = GONE
+                    stickerView1.visibility = VISIBLE
+                    backArrow.visibility = VISIBLE
                     val params =
                         faceFragmentCointanier.layoutParams as ConstraintLayout.LayoutParams
                     params.bottomToTop = R.id.stickerView1
@@ -86,14 +100,14 @@ class TakePictureActivity : AppCompatActivity() {
         })
         binding.apply {
             backArrow.setOnClickListener {
-                makeupView.visibility = View.VISIBLE
-                takePhotoView.visibility = View.VISIBLE
-                stickerView.visibility = View.VISIBLE
-                makeupView1.visibility = View.GONE
-                makeupView1a.visibility = View.GONE
-                backArrow.visibility = View.GONE
-                stickerView1.visibility = View.GONE
-                backArrow.visibility = View.GONE
+                makeupView.visibility = VISIBLE
+                takePhotoView.visibility = VISIBLE
+                stickerView.visibility = VISIBLE
+                makeupView1.visibility = GONE
+                makeupView1a.visibility = GONE
+                backArrow.visibility = GONE
+                stickerView1.visibility = GONE
+                backArrow.visibility = GONE
                 val params =
                     faceFragmentCointanier.layoutParams as ConstraintLayout.LayoutParams
                 params.bottomToTop = R.id.takePhotoView
@@ -140,8 +154,8 @@ class TakePictureActivity : AppCompatActivity() {
                         ArrayList(arFragment.arSceneView.scene.children)
                     for (node in children) {
                         if (node is AnchorNode) {
-                            if ((node as AnchorNode).getAnchor() != null) {
-                                (node as AnchorNode).getAnchor()?.detach()
+                            if (node.anchor != null) {
+                                node.anchor?.detach()
                             }
                         }
                         if (node !is Camera && node !is Sun) {
@@ -185,8 +199,8 @@ class TakePictureActivity : AppCompatActivity() {
                         ArrayList(arFragment.arSceneView.scene.children)
                     for (node in children) {
                         if (node is AnchorNode) {
-                            if (node.getAnchor() != null) {
-                                node.getAnchor()?.detach()
+                            if (node.anchor != null) {
+                                node.anchor?.detach()
                             }
                         }
                         if (node !is Camera && node !is Sun) {
@@ -196,15 +210,18 @@ class TakePictureActivity : AppCompatActivity() {
                 }
             }
         })
+        binding.takePhotoView.setOnClickListener {
+            takePhoto()
+        }
     }
 
-    fun loadTexture(tex: Int) {
+    private fun loadTexture(tex: Int) {
         Texture.builder()
             .setSource(this, tex)
             .build()
             .thenAccept { texture -> meshTexture = texture }
     }
-    fun loadModel(mod: Int) {
+    private fun loadModel(mod: Int) {
         ModelRenderable.builder()
             .setSource(this, mod)
             .build()
@@ -215,6 +232,91 @@ class TakePictureActivity : AppCompatActivity() {
                 }
                 modelRenderable = model
             }
+    }
+    private fun generateFilename(): String? {
+        val date =
+            SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+                .format(Date())
+        return Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES
+        ).toString() + File.separator + "Sceneform/" + date + "_screenshot.jpg"
+    }
+
+    @Throws(IOException::class)
+    private fun saveBitmapToDisk(bitmap: Bitmap, filename: String) {
+        val out = File(filename)
+        if (!out.parentFile.exists()) {
+            out.parentFile.mkdirs()
+        }
+        try {
+            FileOutputStream(filename).use { outputStream ->
+                ByteArrayOutputStream().use { outputData ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputData)
+                    outputData.writeTo(outputStream)
+                    outputStream.flush()
+                    outputStream.close()
+                }
+            }
+        } catch (ex: IOException) {
+            throw IOException("Failed to save bitmap to disk", ex)
+        }
+    }
+
+    private fun takePhoto() {
+        val filename = generateFilename()
+        val view: ArSceneView = arFragment.getArSceneView()
+
+        // Create a bitmap the size of the scene view.
+        val bitmap = Bitmap.createBitmap(
+            view.width, view.height,
+            Bitmap.Config.ARGB_8888
+        )
+
+        // Create a handler thread to offload the processing of the image.
+        val handlerThread = HandlerThread("PixelCopier")
+        handlerThread.start()
+        // Make the request to copy.
+        PixelCopy.request(view, bitmap, { copyResult ->
+            if (copyResult === PixelCopy.SUCCESS) {
+                try {
+                    saveBitmapToDisk(bitmap, filename!!)
+                } catch (e: IOException) {
+                    val toast = Toast.makeText(
+                        this, e.toString(),
+                        Toast.LENGTH_LONG
+                    )
+                    toast.show()
+                    return@request
+                }
+                val snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Photo saved", Snackbar.LENGTH_LONG
+                )
+                snackbar.setAction(
+                    "Open in Photos"
+                ) { v: View? ->
+                    val photoFile = File(filename)
+                    val photoURI = FileProvider.getUriForFile(
+                        this,
+                        this.getPackageName()
+                            .toString() + ".ar.codelab.name.provider",
+                        photoFile
+                    )
+                    val intent = Intent(Intent.ACTION_VIEW, photoURI)
+                    intent.setDataAndType(photoURI, "image/*")
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(intent)
+                }
+                snackbar.show()
+            } else {
+                val toast = Toast.makeText(
+                    this,
+                    "Failed to copyPixels: $copyResult", Toast.LENGTH_LONG
+                )
+                toast.show()
+            }
+            handlerThread.quitSafely()
+        }, Handler(handlerThread.looper))
     }
 }
 

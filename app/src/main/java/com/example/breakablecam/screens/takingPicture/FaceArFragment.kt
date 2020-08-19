@@ -1,5 +1,6 @@
 package com.example.breakablecam.screens.takingPicture
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,7 @@ import android.widget.FrameLayout
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.sceneform.ux.ArFragment
-import java.util.EnumSet
+import java.util.*
 
 class FaceArFragment : ArFragment() {
 
@@ -18,6 +19,24 @@ class FaceArFragment : ArFragment() {
 
     override fun getSessionFeatures(): MutableSet<Session.Feature> {
         return EnumSet.of(Session.Feature.FRONT_CAMERA)
+    }
+    override fun getAdditionalPermissions(): Array<String?>? {
+        val additionalPermissions = super.getAdditionalPermissions()
+        val permissionLength =
+            additionalPermissions?.size ?: 0
+        val permissions =
+            arrayOfNulls<String>(permissionLength + 1)
+        permissions[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        if (permissionLength > 0) {
+            System.arraycopy(
+                additionalPermissions,
+                0,
+                permissions,
+                1,
+                additionalPermissions!!.size
+            )
+        }
+        return permissions
     }
 
     /**
