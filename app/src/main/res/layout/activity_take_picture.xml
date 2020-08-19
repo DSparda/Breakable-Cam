@@ -32,16 +32,38 @@
                 android:layout_height="match_parent" />
         </androidx.fragment.app.FragmentContainerView>
 
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/stickerView"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
             android:layout_marginBottom="16dp"
+            android:onClick="@{() -> takePictureViewModel.tapSticker()}"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/takePhotoView"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/stickerView1"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:onClick="@{() -> takePictureViewModel.tapSticker1()}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
@@ -73,11 +95,11 @@
             android:layout_height="@android:dimen/app_icon_size"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
+            android:onClick="@{() -> takePictureViewModel.tapMakeup1aView()}"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible"
-            android:onClick="@{() -> takePictureViewModel.tapMakeup1aView()}"/>
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/makeupView1"
